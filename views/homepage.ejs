@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Blog App</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
@@ -16,6 +16,9 @@
 
     <main>
         <form action="/register" method="POST">
+            <% errors.forEach(error => { %> 
+                <p class="notice"><%= error %> </p>
+            <% }) %>
         <fieldset>
             <legend>Create an Account</legend>
                 <label for="username"><small>Username</small></label>
