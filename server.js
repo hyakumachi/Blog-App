@@ -4,15 +4,20 @@ db.pragma("journal_mode = WAL")
 
 //db setup starts here
 const createTables = db.transaction(() => {
-    db.prepare(`
-        CREATE TABLE IF NOT EXISTS users(
+    db.prepare(
+        `
+        CREATE TABLE IF NOT EXISTS users (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         username STRING NOT NULL UNIQUE,
         password STRING NOT NULL
-        )`).run()
+        )
+        `
+    ).run()
 })
 
 createTables()
+
+
 //db setup ends here
 
 
