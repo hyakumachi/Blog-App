@@ -1,3 +1,4 @@
+const bcrypt = require("bcrypt")
 const express = require('express')
 const db = require("better-sqlite3")("database.db")
 db.pragma("journal_mode = WAL")
@@ -62,9 +63,22 @@ app.post("/register", (req, res) => {
     } 
 
     //save the new user into a database
+    const salt = bcrypt.genSaltSync(10)
+    req.body.password = bcrypt.hashSync(req.body.password, salt)
+    
+    const ourStatement = db.prepare("INSERT INTO users (username, password) VALUES (?, ?)")
+    ourStatement.run(req.body.username, req.body.password)
+    
 
     //log the user in by giving them a cookie
+    res.cookie("KaonAronMaVloggerApp","topsecretval", {
+        httpOnly: true,
+        secure: true,
+        sameSite: "strict",
+        maxAge: 1000 * 60 * 60 * 24
+    })
 
+    res.send("User registered!");
 })
 
 app.listen(3000)
