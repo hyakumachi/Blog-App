@@ -9,7 +9,8 @@ const createTables = db.transaction(() => {
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         username STRING NOT NULL UNIQUE,
         password STRING NOT NULL
-        )`).run()
+        )`
+    ).run()
 })
 
 createTables()
