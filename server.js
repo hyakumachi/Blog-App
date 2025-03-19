@@ -1,3 +1,4 @@
+const jwt = require("jsonwebtoken")
 const bcrypt = require("bcrypt")
 const express = require('express')
 const db = require("better-sqlite3")("database.db")
