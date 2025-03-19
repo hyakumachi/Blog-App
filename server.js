@@ -48,11 +48,20 @@ app.use(function (req, res, next) {
 })
 
 app.get("/", (req, res) => {
-    res.render("homepage")
+  if (req.user) {
+    return res.render("dashboard")
+  }
+
+  res.render("homepage")
 })
 
 app.get("/login", (req, res) => {
     res.render("login")
+})
+
+app.get("/logout", (req, res) => {
+  res.clearCookie("KaonAronMaVloggerApp")
+  res.redirect("/")
 })
 
 app.post("/register", (req, res) => {
