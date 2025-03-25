@@ -1,32 +1,14 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Blog App</title>
-    <link rel="stylesheet" href="styles.css">
-</head>
+    <%- include('includes/head') -%>
 <body>
-    <header>
-        <h2><a href="/">Kaon Aron Ma Vlogger App</a></h2>
-        <nav>
-            <% if (user) { %>
-                <a href="/create-post">Create Post</a>
-                <a href="/logout">Log Out</a>
-            <% } else { %>
-                <a href="/login">Log In</a>
-            <% } %>
-            
-        </nav>
-    </header>
+    <%- include('includes/header') -%>
 
     <main>
        <h2>Dashboard</h2>
        <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Omnis cupiditate, deserunt quo corporis aperiam optio officia illo ea inventore quas fugit? Consectetur corporis quos sunt impedit, aperiam fuga voluptatibus nostrum?</p>
     </main>
 
-    <footer>
-        <small>&copy; 2025 Kaon Aron Ma Vlogger App</small>
-    </footer>
+    <%- include('includes/footer') -%>
 </body>
 </html>
