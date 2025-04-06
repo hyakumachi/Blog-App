@@ -1,5 +1,6 @@
 require("dotenv").config()
 const jwt = require("jsonwebtoken")
+const sanitizeHtml = require("sanitize-html")
 const bcrypt = require("bcrypt")
 const cookieParser = require("cookie-parser")
 const express = require('express')
@@ -110,6 +111,45 @@ app.post("/login", (req, res) => {
     });
 
     res.redirect("/");
+})
+
+function mustbeLoggedIn(req, res, next) {
+    if (req.user) {
+        return next()
+    }
+    res.redirect("/")
+}
+
+app.get("/create-post", mustbeLoggedIn, (req, res) => {
+    res.render("create-post")
+})
+
+function sharedPostValidation(req) {
+    const errors = []
+
+    if(typeof req.body.title !== "string") req.body.title = ""
+    if(typeof req.body.body !== "string") req.body.body = ""
+
+    //trim the title and body
+    req.body.title = sanitizeHtml(req.body,title.trim(), {allowedTags: [], allowedAttributes: {}})
+    req.body.body = sanitizeHtml(req.body.body.trim(), {allowedTags: [], allowedAttributes: {}})
+    
+    if(!req.body.title) errors.push("Please provide a title.")
+    if(!req.body.body) errors.push("Please provide content.");
+
+    return errors
+}
+
+app.post("/create-post", mustbeLoggedIn, (req, res) => {
+    const errors = sharedPostValidation(req)
+
+    if(errors.length) {
+        return res.render("create-post", { errors })
+    }
+
+    //save the post into the database
+    //const statement = db.prepare("INSERT INTO posts (title, body, author) VALUES (?, ?, ?)")
+
 })
 
 app.post("/register", (req, res) => {
