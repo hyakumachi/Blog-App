@@ -6,12 +6,14 @@
 
     <main>
       <h2>Dashboard</h2>
-      <p>
-        Lorem ipsum dolor sit, amet consectetur adipisicing elit. Omnis
-        cupiditate, deserunt quo corporis aperiam optio officia illo ea
-        inventore quas fugit? Consectetur corporis quos sunt impedit, aperiam
-        fuga voluptatibus nostrum?
-      </p>
+      <ul>
+        <% posts.forEach(post => { %>
+        <li><a href="/posts/<%= post.id %>"><%= post.title %></a> on
+        <%= new Date(post.createdDate).getMonth() + 1 %>/<%= new
+        Date(post.createdDate).getDate()%>/<%= new
+        Date(post.createdDate).getFullYear()%></li>
+      <% }) %>
+      </ul>
     </main>
 
     <%- include('includes/footer') -%>

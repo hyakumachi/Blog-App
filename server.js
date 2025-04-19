@@ -64,7 +64,9 @@ app.use(function (req, res, next) {
 
 app.get("/", (req, res) => {
   if (req.user) {
-    return res.render("dashboard");
+    const postsStatement = db.prepare("SELECT * FROM posts WHERE authorid = ?")
+    const posts = postsStatement.all(req.user.userid) 
+    return res.render("dashboard", { posts });
   }
 
   res.render("homepage");
