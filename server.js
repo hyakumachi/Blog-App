@@ -17,6 +17,18 @@ const createTables = db.transaction(() => {
         password STRING NOT NULL
         )`
   ).run();
+
+  db.prepare(
+    `
+        CREATE TABLE IF NOT EXISTS posts (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        createdDate TEXT,
+        title STRING NOT NULL,
+        body TEXT NOT NULL,
+        authorid INTEGER,
+        FOREIGN KEY (authorid) REFERENCES users(id)
+        )`
+  ).run();
 });
 
 createTables();
