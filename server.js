@@ -149,7 +149,7 @@ function sharedPostValidation(req) {
   if (typeof req.body.body !== "string") req.body.body = "";
 
   //trim the title and body
-  req.body.title = sanitizeHtml(req.body, title.trim(), {
+  req.body.title = sanitizeHtml(req.body.title.trim(), {
     allowedTags: [],
     allowedAttributes: {},
   });
@@ -164,6 +164,17 @@ function sharedPostValidation(req) {
   return errors;
 }
 
+app.get("/post/:id", (req, res) => {
+  const statement = db.prepare("SELECT posts.*, users.username FROM posts INNER JOIN users ON posts.authorid = users.id WHERE posts.id = ?");
+  const post = statement.get(req.params.id);
+
+  if (!post) {
+    return res.redirect("/");
+  }
+
+  res.render("single-post", { post })
+})
+
 app.post("/create-post", mustbeLoggedIn, (req, res) => {
   const errors = sharedPostValidation(req);
 
@@ -171,8 +182,19 @@ app.post("/create-post", mustbeLoggedIn, (req, res) => {
     return res.render("create-post", { errors });
   }
 
-  //save the post into the database
-  //const statement = db.prepare("INSERT INTO posts (title, body, author) VALUES (?, ?, ?)")
+  const ourStatement = db.prepare(
+    "INSERT INTO posts (title, body, authorid, createdDate) VALUES (?, ?, ?, ?)"
+  );
+  const result = ourStatement.run(
+    req.body.title,
+    req.body.body,
+    req.user.userid,
+    new Date().toISOString()
+  );
+  const getPostStatement = db.prepare("SELECT * FROM posts WHERE ROWID = ?");
+  const realPost = getPostStatement.get(result.lastInsertRowid);
+
+  res.redirect(`/post/${realPost.id}`);
 });
 
 app.post("/register", (req, res) => {
