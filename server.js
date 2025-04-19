@@ -166,7 +166,7 @@ function sharedPostValidation(req) {
   return errors;
 }
 
-app.get("/post/:id", (req, res) => {
+app.get("/posts/:id", (req, res) => {
   const statement = db.prepare("SELECT posts.*, users.username FROM posts INNER JOIN users ON posts.authorid = users.id WHERE posts.id = ?");
   const post = statement.get(req.params.id);
 
@@ -196,7 +196,7 @@ app.post("/create-post", mustbeLoggedIn, (req, res) => {
   const getPostStatement = db.prepare("SELECT * FROM posts WHERE ROWID = ?");
   const realPost = getPostStatement.get(result.lastInsertRowid);
 
-  res.redirect(`/post/${realPost.id}`);
+  res.redirect(`/posts/${realPost.id}`);
 });
 
 app.post("/register", (req, res) => {
